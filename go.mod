@@ -2,7 +2,10 @@ module github.com/WeiAnAn/url-shortener
 
 go 1.18
 
-require github.com/gin-gonic/gin v1.9.0
+require (
+	github.com/gin-gonic/gin v1.9.0
+	github.com/golang/mock v1.6.0
+)
 
 require (
 	github.com/bytedance/sonic v1.8.0 // indirect
