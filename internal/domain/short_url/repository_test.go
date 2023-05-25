@@ -103,6 +103,7 @@ func TestFindByShortURLGetFromPersistent(t *testing.T) {
 	cs.EXPECT().Get(gomock.Eq(url.ShortUrl.ShortURL)).Return("", nil)
 	ps.EXPECT().FindUnexpiredByShortURL(gomock.Eq(url.ShortUrl.ShortURL)).Return(url, nil)
 	cs.EXPECT().Set(url.ShortUrl.ShortURL, url.ShortUrl.OriginalURL, uint(300)).Return(nil)
+	tu.EXPECT().Until(expireAt).Return(d)
 
 	result, err := repo.FindByShortURL(url.ShortUrl.ShortURL)
 	if err != nil {
