@@ -7,7 +7,12 @@ import (
 	"github.com/WeiAnAn/url-shortener/internal/utils"
 )
 
-type ShortURLRepository struct {
+type ShortURLRepository interface {
+	Save(*ShortURLWithExpireTime) error
+	FindByShortURL(string) (*ShortURL, error)
+}
+
+type shortURLRepository struct {
 	persistentStore PersistentStore
 	cacheStore      CacheStore
 	time            utils.TimeUtil
@@ -23,13 +28,13 @@ type ShortURLWithExpireTime struct {
 	ExpireAt time.Time
 }
 
-func NewRepository(ps PersistentStore, cs CacheStore, t utils.TimeUtil) *ShortURLRepository {
-	repo := &ShortURLRepository{ps, cs, t}
+func NewRepository(ps PersistentStore, cs CacheStore, t utils.TimeUtil) *shortURLRepository {
+	repo := &shortURLRepository{ps, cs, t}
 
 	return repo
 }
 
-func (repo *ShortURLRepository) Save(shortURL *ShortURLWithExpireTime) error {
+func (repo *shortURLRepository) Save(shortURL *ShortURLWithExpireTime) error {
 	err := repo.persistentStore.Save(shortURL)
 	if err != nil {
 		return err
@@ -37,7 +42,7 @@ func (repo *ShortURLRepository) Save(shortURL *ShortURLWithExpireTime) error {
 	return nil
 }
 
-func (repo *ShortURLRepository) FindByShortURL(shortURL string) (*ShortURL, error) {
+func (repo *shortURLRepository) FindByShortURL(shortURL string) (*ShortURL, error) {
 	originalURL, err := repo.cacheStore.Get(shortURL)
 	if err != nil {
 		return nil, err
