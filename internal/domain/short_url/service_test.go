@@ -12,6 +12,7 @@ import (
 
 func TestCreateShortURLGenerateShortURLAndCallRepoSave(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 	mockRepo, mockShortURLGenerator, service := createService(ctrl)
 
 	originalURL := "https://pkg.go.dev/"
@@ -38,6 +39,7 @@ func TestCreateShortURLGenerateShortURLAndCallRepoSave(t *testing.T) {
 
 func TestCreateShortURLReturnErrorIfGeneratorReturnError(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 	_, mockShortURLGenerator, service := createService(ctrl)
 
 	originalURL := "https://pkg.go.dev/"
@@ -55,6 +57,7 @@ func TestCreateShortURLReturnErrorIfGeneratorReturnError(t *testing.T) {
 
 func TestCreateShortURLReturnErrorIfRepoSaveReturnError(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 	mockRepo, mockShortURLGenerator, service := createService(ctrl)
 
 	originalURL := "https://pkg.go.dev/"
@@ -78,6 +81,7 @@ func TestCreateShortURLReturnErrorIfRepoSaveReturnError(t *testing.T) {
 
 func TestGetOriginalURLReturnExpectedURL(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 	mockRepo, _, service := createService(ctrl)
 
 	shortURL := &shorturl.ShortURL{
@@ -97,6 +101,7 @@ func TestGetOriginalURLReturnExpectedURL(t *testing.T) {
 
 func TestGetOriginalURLReturnErrorIfRepoFindReturnError(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 	mockRepo, _, service := createService(ctrl)
 
 	shortURL := &shorturl.ShortURL{
