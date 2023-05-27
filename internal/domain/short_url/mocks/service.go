@@ -6,7 +6,9 @@ package mock_shorturl
 
 import (
 	reflect "reflect"
+	time "time"
 
+	shorturl "github.com/WeiAnAn/url-shortener/internal/domain/short_url"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -46,4 +48,57 @@ func (m *MockShortURLGenerator) Generate(arg0 int) (string, error) {
 func (mr *MockShortURLGeneratorMockRecorder) Generate(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Generate", reflect.TypeOf((*MockShortURLGenerator)(nil).Generate), arg0)
+}
+
+// MockService is a mock of Service interface.
+type MockService struct {
+	ctrl     *gomock.Controller
+	recorder *MockServiceMockRecorder
+}
+
+// MockServiceMockRecorder is the mock recorder for MockService.
+type MockServiceMockRecorder struct {
+	mock *MockService
+}
+
+// NewMockService creates a new mock instance.
+func NewMockService(ctrl *gomock.Controller) *MockService {
+	mock := &MockService{ctrl: ctrl}
+	mock.recorder = &MockServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockService) EXPECT() *MockServiceMockRecorder {
+	return m.recorder
+}
+
+// CreateShortURL mocks base method.
+func (m *MockService) CreateShortURL(arg0 string, arg1 time.Time) (*shorturl.ShortURLWithExpireTime, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateShortURL", arg0, arg1)
+	ret0, _ := ret[0].(*shorturl.ShortURLWithExpireTime)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateShortURL indicates an expected call of CreateShortURL.
+func (mr *MockServiceMockRecorder) CreateShortURL(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateShortURL", reflect.TypeOf((*MockService)(nil).CreateShortURL), arg0, arg1)
+}
+
+// GetOriginalURL mocks base method.
+func (m *MockService) GetOriginalURL(arg0 string) (*shorturl.ShortURL, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetOriginalURL", arg0)
+	ret0, _ := ret[0].(*shorturl.ShortURL)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetOriginalURL indicates an expected call of GetOriginalURL.
+func (mr *MockServiceMockRecorder) GetOriginalURL(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOriginalURL", reflect.TypeOf((*MockService)(nil).GetOriginalURL), arg0)
 }
