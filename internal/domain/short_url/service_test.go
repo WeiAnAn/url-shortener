@@ -1,6 +1,7 @@
 package shorturl_test
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -19,7 +20,8 @@ func TestCreateShortURLGenerateShortURLAndCallRepoSave(t *testing.T) {
 	expireAt := time.Now()
 	shortURL := "aaaaaaa"
 	mockShortURLGenerator.EXPECT().Generate(7).Return(shortURL, nil)
-	mockRepo.EXPECT().Save(&shorturl.ShortURLWithExpireTime{
+	c := context.Background()
+	mockRepo.EXPECT().Save(c, &shorturl.ShortURLWithExpireTime{
 		ShortUrl: &shorturl.ShortURL{
 			ShortURL:    shortURL,
 			OriginalURL: originalURL,
@@ -27,7 +29,7 @@ func TestCreateShortURLGenerateShortURLAndCallRepoSave(t *testing.T) {
 		ExpireAt: expireAt,
 	}).Return(nil)
 
-	result, err := service.CreateShortURL(originalURL, expireAt)
+	result, err := service.CreateShortURL(c, originalURL, expireAt)
 	if err != nil {
 		t.Fail()
 	}
@@ -48,7 +50,8 @@ func TestCreateShortURLReturnErrorIfGeneratorReturnError(t *testing.T) {
 	mockErr := errors.New("error")
 	mockShortURLGenerator.EXPECT().Generate(7).Return("", mockErr)
 
-	_, err := service.CreateShortURL(originalURL, expireAt)
+	c := context.Background()
+	_, err := service.CreateShortURL(c, originalURL, expireAt)
 
 	if err != mockErr {
 		t.Fail()
@@ -65,7 +68,8 @@ func TestCreateShortURLReturnErrorIfRepoSaveReturnError(t *testing.T) {
 	shortURL := "aaaaaaa"
 	mockShortURLGenerator.EXPECT().Generate(7).Return(shortURL, nil)
 	mockErr := errors.New("error")
-	mockRepo.EXPECT().Save(&shorturl.ShortURLWithExpireTime{
+	c := context.Background()
+	mockRepo.EXPECT().Save(c, &shorturl.ShortURLWithExpireTime{
 		ShortUrl: &shorturl.ShortURL{
 			ShortURL:    shortURL,
 			OriginalURL: originalURL,
@@ -73,7 +77,7 @@ func TestCreateShortURLReturnErrorIfRepoSaveReturnError(t *testing.T) {
 		ExpireAt: expireAt,
 	}).Return(mockErr)
 
-	_, err := service.CreateShortURL(originalURL, expireAt)
+	_, err := service.CreateShortURL(c, originalURL, expireAt)
 	if err != mockErr {
 		t.Fail()
 	}
@@ -88,9 +92,10 @@ func TestGetOriginalURLReturnExpectedURL(t *testing.T) {
 		ShortURL:    "aaaaaaa",
 		OriginalURL: "https://pkg.go.dev",
 	}
-	mockRepo.EXPECT().FindByShortURL(shortURL.ShortURL).Return(shortURL, nil)
+	c := context.Background()
+	mockRepo.EXPECT().FindByShortURL(c, shortURL.ShortURL).Return(shortURL, nil)
 
-	result, err := service.GetOriginalURL(shortURL.ShortURL)
+	result, err := service.GetOriginalURL(c, shortURL.ShortURL)
 	if err != nil {
 		t.Fail()
 	}
@@ -109,9 +114,10 @@ func TestGetOriginalURLReturnErrorIfRepoFindReturnError(t *testing.T) {
 		OriginalURL: "https://pkg.go.dev",
 	}
 	mockErr := errors.New("error")
-	mockRepo.EXPECT().FindByShortURL(shortURL.ShortURL).Return(nil, mockErr)
+	c := context.Background()
+	mockRepo.EXPECT().FindByShortURL(c, shortURL.ShortURL).Return(nil, mockErr)
 
-	_, err := service.GetOriginalURL(shortURL.ShortURL)
+	_, err := service.GetOriginalURL(c, shortURL.ShortURL)
 	if err != mockErr {
 		t.Fail()
 	}

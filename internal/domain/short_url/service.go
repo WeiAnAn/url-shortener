@@ -1,14 +1,17 @@
 package shorturl
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 type ShortURLGenerator interface {
 	Generate(int) (string, error)
 }
 
 type Service interface {
-	CreateShortURL(string, time.Time) (*ShortURLWithExpireTime, error)
-	GetOriginalURL(string) (*ShortURL, error)
+	CreateShortURL(context.Context, string, time.Time) (*ShortURLWithExpireTime, error)
+	GetOriginalURL(context.Context, string) (*ShortURL, error)
 }
 
 type service struct {
@@ -20,7 +23,7 @@ func NewService(sr ShortURLRepository, sg ShortURLGenerator) *service {
 	return &service{sr, sg}
 }
 
-func (s *service) CreateShortURL(originalURL string, expireAt time.Time) (*ShortURLWithExpireTime, error) {
+func (s *service) CreateShortURL(c context.Context, originalURL string, expireAt time.Time) (*ShortURLWithExpireTime, error) {
 	short, err := s.shortURLGenerator.Generate(7)
 	if err != nil {
 		return nil, err
@@ -34,7 +37,7 @@ func (s *service) CreateShortURL(originalURL string, expireAt time.Time) (*Short
 		ExpireAt: expireAt,
 	}
 
-	err = s.shortURLRepository.Save(shortURL)
+	err = s.shortURLRepository.Save(c, shortURL)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +45,8 @@ func (s *service) CreateShortURL(originalURL string, expireAt time.Time) (*Short
 	return shortURL, nil
 }
 
-func (s *service) GetOriginalURL(short string) (*ShortURL, error) {
-	shortURL, err := s.shortURLRepository.FindByShortURL(short)
+func (s *service) GetOriginalURL(c context.Context, short string) (*ShortURL, error) {
+	shortURL, err := s.shortURLRepository.FindByShortURL(c, short)
 	if err != nil {
 		return nil, err
 	}

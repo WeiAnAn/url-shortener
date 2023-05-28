@@ -1,6 +1,8 @@
 package shorturl
 
+import "context"
+
 type CacheStore interface {
-	Get(key string) (string, error)
-	Set(key, value string, expireSecond uint) error
+	Get(c context.Context, key string) (string, error)
+	Set(c context.Context, key, value string, expireSecond uint) error
 }

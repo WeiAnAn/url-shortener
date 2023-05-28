@@ -5,6 +5,7 @@
 package mock_shorturl
 
 import (
+	context "context"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -34,30 +35,30 @@ func (m *MockCacheStore) EXPECT() *MockCacheStoreMockRecorder {
 }
 
 // Get mocks base method.
-func (m *MockCacheStore) Get(key string) (string, error) {
+func (m *MockCacheStore) Get(c context.Context, key string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", key)
+	ret := m.ctrl.Call(m, "Get", c, key)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Get indicates an expected call of Get.
-func (mr *MockCacheStoreMockRecorder) Get(key interface{}) *gomock.Call {
+func (mr *MockCacheStoreMockRecorder) Get(c, key interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockCacheStore)(nil).Get), key)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockCacheStore)(nil).Get), c, key)
 }
 
 // Set mocks base method.
-func (m *MockCacheStore) Set(key, value string, expireSecond uint) error {
+func (m *MockCacheStore) Set(c context.Context, key, value string, expireSecond uint) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Set", key, value, expireSecond)
+	ret := m.ctrl.Call(m, "Set", c, key, value, expireSecond)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Set indicates an expected call of Set.
-func (mr *MockCacheStoreMockRecorder) Set(key, value, expireSecond interface{}) *gomock.Call {
+func (mr *MockCacheStoreMockRecorder) Set(c, key, value, expireSecond interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockCacheStore)(nil).Set), key, value, expireSecond)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockCacheStore)(nil).Set), c, key, value, expireSecond)
 }

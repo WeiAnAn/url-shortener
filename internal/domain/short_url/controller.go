@@ -39,7 +39,7 @@ func (c *Controller) CreateShortURL(ctx *gin.Context) {
 		return
 	}
 
-	shortUrl, err := c.service.CreateShortURL(body.URL, body.ExpireAt)
+	shortUrl, err := c.service.CreateShortURL(ctx, body.URL, body.ExpireAt)
 	if err != nil {
 		ctx.Error(err)
 		return
@@ -67,7 +67,7 @@ func (c *Controller) Redirect(ctx *gin.Context) {
 		return
 	}
 
-	shortURL, err := c.service.GetOriginalURL(params.URL)
+	shortURL, err := c.service.GetOriginalURL(ctx, params.URL)
 	if err != nil {
 		ctx.Error(err)
 		return

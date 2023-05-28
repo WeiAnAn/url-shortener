@@ -5,6 +5,7 @@
 package mock_shorturl
 
 import (
+	context "context"
 	reflect "reflect"
 
 	shorturl "github.com/WeiAnAn/url-shortener/internal/domain/short_url"
@@ -35,30 +36,30 @@ func (m *MockShortURLRepository) EXPECT() *MockShortURLRepositoryMockRecorder {
 }
 
 // FindByShortURL mocks base method.
-func (m *MockShortURLRepository) FindByShortURL(arg0 string) (*shorturl.ShortURL, error) {
+func (m *MockShortURLRepository) FindByShortURL(arg0 context.Context, arg1 string) (*shorturl.ShortURL, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByShortURL", arg0)
+	ret := m.ctrl.Call(m, "FindByShortURL", arg0, arg1)
 	ret0, _ := ret[0].(*shorturl.ShortURL)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindByShortURL indicates an expected call of FindByShortURL.
-func (mr *MockShortURLRepositoryMockRecorder) FindByShortURL(arg0 interface{}) *gomock.Call {
+func (mr *MockShortURLRepositoryMockRecorder) FindByShortURL(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByShortURL", reflect.TypeOf((*MockShortURLRepository)(nil).FindByShortURL), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByShortURL", reflect.TypeOf((*MockShortURLRepository)(nil).FindByShortURL), arg0, arg1)
 }
 
 // Save mocks base method.
-func (m *MockShortURLRepository) Save(arg0 *shorturl.ShortURLWithExpireTime) error {
+func (m *MockShortURLRepository) Save(arg0 context.Context, arg1 *shorturl.ShortURLWithExpireTime) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", arg0)
+	ret := m.ctrl.Call(m, "Save", arg0, arg1)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Save indicates an expected call of Save.
-func (mr *MockShortURLRepositoryMockRecorder) Save(arg0 interface{}) *gomock.Call {
+func (mr *MockShortURLRepositoryMockRecorder) Save(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockShortURLRepository)(nil).Save), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockShortURLRepository)(nil).Save), arg0, arg1)
 }

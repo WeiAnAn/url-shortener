@@ -5,6 +5,7 @@
 package mock_shorturl
 
 import (
+	context "context"
 	reflect "reflect"
 
 	shorturl "github.com/WeiAnAn/url-shortener/internal/domain/short_url"
@@ -35,30 +36,30 @@ func (m *MockPersistentStore) EXPECT() *MockPersistentStoreMockRecorder {
 }
 
 // FindUnexpiredByShortURL mocks base method.
-func (m *MockPersistentStore) FindUnexpiredByShortURL(hash string) (*shorturl.ShortURLWithExpireTime, error) {
+func (m *MockPersistentStore) FindUnexpiredByShortURL(c context.Context, shortURL string) (*shorturl.ShortURLWithExpireTime, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindUnexpiredByShortURL", hash)
+	ret := m.ctrl.Call(m, "FindUnexpiredByShortURL", c, shortURL)
 	ret0, _ := ret[0].(*shorturl.ShortURLWithExpireTime)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindUnexpiredByShortURL indicates an expected call of FindUnexpiredByShortURL.
-func (mr *MockPersistentStoreMockRecorder) FindUnexpiredByShortURL(hash interface{}) *gomock.Call {
+func (mr *MockPersistentStoreMockRecorder) FindUnexpiredByShortURL(c, shortURL interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUnexpiredByShortURL", reflect.TypeOf((*MockPersistentStore)(nil).FindUnexpiredByShortURL), hash)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUnexpiredByShortURL", reflect.TypeOf((*MockPersistentStore)(nil).FindUnexpiredByShortURL), c, shortURL)
 }
 
 // Save mocks base method.
-func (m *MockPersistentStore) Save(shortUrl *shorturl.ShortURLWithExpireTime) error {
+func (m *MockPersistentStore) Save(c context.Context, shortUrl *shorturl.ShortURLWithExpireTime) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", shortUrl)
+	ret := m.ctrl.Call(m, "Save", c, shortUrl)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Save indicates an expected call of Save.
-func (mr *MockPersistentStoreMockRecorder) Save(shortUrl interface{}) *gomock.Call {
+func (mr *MockPersistentStoreMockRecorder) Save(c, shortUrl interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockPersistentStore)(nil).Save), shortUrl)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockPersistentStore)(nil).Save), c, shortUrl)
 }

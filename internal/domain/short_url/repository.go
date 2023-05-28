@@ -1,6 +1,7 @@
 package shorturl
 
 import (
+	"context"
 	"math"
 	"time"
 
@@ -8,8 +9,8 @@ import (
 )
 
 type ShortURLRepository interface {
-	Save(*ShortURLWithExpireTime) error
-	FindByShortURL(string) (*ShortURL, error)
+	Save(context.Context, *ShortURLWithExpireTime) error
+	FindByShortURL(context.Context, string) (*ShortURL, error)
 }
 
 type shortURLRepository struct {
@@ -34,16 +35,16 @@ func NewRepository(ps PersistentStore, cs CacheStore, t utils.TimeUtil) *shortUR
 	return repo
 }
 
-func (repo *shortURLRepository) Save(shortURL *ShortURLWithExpireTime) error {
-	err := repo.persistentStore.Save(shortURL)
+func (repo *shortURLRepository) Save(c context.Context, shortURL *ShortURLWithExpireTime) error {
+	err := repo.persistentStore.Save(c, shortURL)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (repo *shortURLRepository) FindByShortURL(shortURL string) (*ShortURL, error) {
-	originalURL, err := repo.cacheStore.Get(shortURL)
+func (repo *shortURLRepository) FindByShortURL(c context.Context, shortURL string) (*ShortURL, error) {
+	originalURL, err := repo.cacheStore.Get(c, shortURL)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +52,7 @@ func (repo *shortURLRepository) FindByShortURL(shortURL string) (*ShortURL, erro
 		return &ShortURL{ShortURL: shortURL, OriginalURL: originalURL}, nil
 	}
 
-	url, err := repo.persistentStore.FindUnexpiredByShortURL(shortURL)
+	url, err := repo.persistentStore.FindUnexpiredByShortURL(c, shortURL)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +63,7 @@ func (repo *shortURLRepository) FindByShortURL(shortURL string) (*ShortURL, erro
 
 	timeToExpired := repo.time.Until(url.ExpireAt).Seconds()
 	cacheSecond := math.Min(timeToExpired, 300)
-	err = repo.cacheStore.Set(url.ShortUrl.ShortURL, url.ShortUrl.OriginalURL, uint(cacheSecond))
+	err = repo.cacheStore.Set(c, url.ShortUrl.ShortURL, url.ShortUrl.OriginalURL, uint(cacheSecond))
 	if err != nil {
 		return nil, err
 	}

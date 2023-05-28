@@ -5,6 +5,7 @@
 package mock_shorturl
 
 import (
+	context "context"
 	reflect "reflect"
 	time "time"
 
@@ -74,31 +75,31 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // CreateShortURL mocks base method.
-func (m *MockService) CreateShortURL(arg0 string, arg1 time.Time) (*shorturl.ShortURLWithExpireTime, error) {
+func (m *MockService) CreateShortURL(arg0 context.Context, arg1 string, arg2 time.Time) (*shorturl.ShortURLWithExpireTime, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateShortURL", arg0, arg1)
+	ret := m.ctrl.Call(m, "CreateShortURL", arg0, arg1, arg2)
 	ret0, _ := ret[0].(*shorturl.ShortURLWithExpireTime)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateShortURL indicates an expected call of CreateShortURL.
-func (mr *MockServiceMockRecorder) CreateShortURL(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockServiceMockRecorder) CreateShortURL(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateShortURL", reflect.TypeOf((*MockService)(nil).CreateShortURL), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateShortURL", reflect.TypeOf((*MockService)(nil).CreateShortURL), arg0, arg1, arg2)
 }
 
 // GetOriginalURL mocks base method.
-func (m *MockService) GetOriginalURL(arg0 string) (*shorturl.ShortURL, error) {
+func (m *MockService) GetOriginalURL(arg0 context.Context, arg1 string) (*shorturl.ShortURL, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetOriginalURL", arg0)
+	ret := m.ctrl.Call(m, "GetOriginalURL", arg0, arg1)
 	ret0, _ := ret[0].(*shorturl.ShortURL)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetOriginalURL indicates an expected call of GetOriginalURL.
-func (mr *MockServiceMockRecorder) GetOriginalURL(arg0 interface{}) *gomock.Call {
+func (mr *MockServiceMockRecorder) GetOriginalURL(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOriginalURL", reflect.TypeOf((*MockService)(nil).GetOriginalURL), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOriginalURL", reflect.TypeOf((*MockService)(nil).GetOriginalURL), arg0, arg1)
 }

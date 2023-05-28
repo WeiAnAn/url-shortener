@@ -50,7 +50,7 @@ func TestCreateShortURLResponseCreatedData(t *testing.T) {
 		ExpireAt: expireAt,
 	}
 	mockService.EXPECT().
-		CreateShortURL(url, expireAt).
+		CreateShortURL(ctx, url, expireAt).
 		Return(shortURL, nil)
 
 	controller.CreateShortURL(ctx)
@@ -279,7 +279,7 @@ func TestShouldSetContextErrorIfServiceReturnAnError(t *testing.T) {
 	}
 	mockErr := errors.New("error")
 	mockService.EXPECT().
-		CreateShortURL(url, expireAt).
+		CreateShortURL(ctx, url, expireAt).
 		Return(shortURL, mockErr)
 
 	controller.CreateShortURL(ctx)
@@ -306,7 +306,7 @@ func TestRedirectRedirectExpectedURL(t *testing.T) {
 		ShortURL:    url,
 		OriginalURL: originalURL,
 	}
-	mockService.EXPECT().GetOriginalURL(url).Return(shortURL, nil)
+	mockService.EXPECT().GetOriginalURL(ctx, url).Return(shortURL, nil)
 
 	controller.Redirect(ctx)
 
@@ -343,7 +343,7 @@ func TestRedirectResponseNotFoundIfServiceReturnNilShortURL(t *testing.T) {
 	ctx := createGinContext(w)
 	url := "aaaaaaa"
 	setRedirectRequest(ctx, url)
-	mockService.EXPECT().GetOriginalURL(url).Return(nil, nil)
+	mockService.EXPECT().GetOriginalURL(ctx, url).Return(nil, nil)
 
 	controller.Redirect(ctx)
 
@@ -361,7 +361,7 @@ func TestRedirectSetContextErrorIfServiceReturnError(t *testing.T) {
 	url := "aaaaaaa"
 	setRedirectRequest(ctx, url)
 	mockErr := errors.New("error")
-	mockService.EXPECT().GetOriginalURL(url).Return(nil, mockErr)
+	mockService.EXPECT().GetOriginalURL(ctx, url).Return(nil, mockErr)
 
 	controller.Redirect(ctx)
 

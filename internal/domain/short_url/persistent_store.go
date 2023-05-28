@@ -1,6 +1,8 @@
 package shorturl
 
+import "context"
+
 type PersistentStore interface {
-	Save(shortUrl *ShortURLWithExpireTime) error
-	FindUnexpiredByShortURL(shortURL string) (*ShortURLWithExpireTime, error)
+	Save(c context.Context, shortUrl *ShortURLWithExpireTime) error
+	FindUnexpiredByShortURL(c context.Context, shortURL string) (*ShortURLWithExpireTime, error)
 }
