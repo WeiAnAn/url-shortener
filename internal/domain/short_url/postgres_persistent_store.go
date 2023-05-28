@@ -34,6 +34,9 @@ func (p *PostgresPersistentStore) FindUnexpiredByShortURL(c context.Context, sho
 		Scan(&short, &originalURL, &expireAt)
 
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 
