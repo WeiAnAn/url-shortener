@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	shorturl "github.com/WeiAnAn/url-shortener/internal/domain/short_url"
+	"github.com/WeiAnAn/url-shortener/internal/middlewares"
 	"github.com/WeiAnAn/url-shortener/internal/utils"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -34,6 +35,8 @@ func main() {
 	sc := shorturl.NewController(ss)
 
 	r := gin.Default()
+	r.Use(middlewares.ErrorHandler())
+
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",

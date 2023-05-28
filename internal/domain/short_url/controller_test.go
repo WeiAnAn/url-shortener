@@ -73,10 +73,6 @@ func TestCreateShortURLResponseBadRequestIfBodyIsEmpty(t *testing.T) {
 
 	controller.CreateShortURL(ctx)
 
-	if w.Code != http.StatusBadRequest {
-		t.Error("Status is not BadRequest")
-	}
-
 	if len(ctx.Errors) != 1 {
 		t.Error("context errors size is not equal to one")
 	}
@@ -114,10 +110,6 @@ func TestCreateShortURLResponseBadRequestIfExpireAtIsNotDateString(t *testing.T)
 
 	controller.CreateShortURL(ctx)
 
-	if w.Code != http.StatusBadRequest {
-		t.Error("Status is not BadRequest")
-	}
-
 	if len(ctx.Errors) != 1 {
 		t.Error("context errors size is not equal to one")
 	}
@@ -147,10 +139,6 @@ func TestCreateShortURLResponseBadRequestIfTimeIsBeforeNow(t *testing.T) {
 	setPostRequest(ctx, body)
 
 	controller.CreateShortURL(ctx)
-
-	if w.Code != http.StatusBadRequest {
-		t.Error("Status is not BadRequest")
-	}
 
 	if len(ctx.Errors) != 1 {
 		t.Error("context errors size is not equal to one")
@@ -191,10 +179,6 @@ func TestCreateShortURLResponseBadRequestIfURLFormatIsInvalid(t *testing.T) {
 
 	controller.CreateShortURL(ctx)
 
-	if w.Code != http.StatusBadRequest {
-		t.Error("Status is not BadRequest")
-	}
-
 	if len(ctx.Errors) != 1 {
 		t.Error("context errors size is not equal to one")
 	}
@@ -229,10 +213,6 @@ func TestCreateShortURLResponseBadRequestIfExpireAtIsAfterOneYear(t *testing.T) 
 	setPostRequest(ctx, body)
 
 	controller.CreateShortURL(ctx)
-
-	if w.Code != http.StatusBadRequest {
-		t.Error("Status is not BadRequest")
-	}
 
 	if len(ctx.Errors) != 1 {
 		t.Error("context errors size is not equal to one")
