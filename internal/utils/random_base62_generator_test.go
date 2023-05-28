@@ -10,7 +10,7 @@ func TestGenerateURLReturnValidString(t *testing.T) {
 	var generator utils.RandomBase62StringGenerator
 
 	for i := 1; i <= 7; i++ {
-		str, err := generator.GenerateURL(i)
+		str, err := generator.Generate(i)
 
 		if err != nil {
 			t.Error(err)

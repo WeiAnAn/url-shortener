@@ -5,9 +5,9 @@ import (
 	"strings"
 )
 
-type RandomBase62StringGenerator int
+type RandomBase62StringGenerator struct{}
 
-func (r *RandomBase62StringGenerator) GenerateURL(length int) (string, error) {
+func (r *RandomBase62StringGenerator) Generate(length int) (string, error) {
 	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 	var builder strings.Builder
 
