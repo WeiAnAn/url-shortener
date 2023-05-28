@@ -76,13 +76,33 @@ func TestFindByShortURLGetFromCacheFirst(t *testing.T) {
 		ExpireAt: now,
 	}
 	c := context.Background()
-	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(url.ShortUrl.OriginalURL, nil)
+	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(&url.ShortUrl.OriginalURL, nil)
 
 	result, err := repo.FindByShortURL(c, url.ShortUrl.ShortURL)
 	if err != nil {
 		t.Fail()
 	}
 	if result.OriginalURL != url.ShortUrl.OriginalURL {
+		t.Fail()
+	}
+}
+func TestFindByShortURLReturnNilIfCacheReturnEmptyString(t *testing.T) {
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	ps, cs, tu := createMock(mockCtrl)
+	repo := shorturl.NewRepository(ps, cs, tu)
+
+	s := ""
+	shortURL := "short"
+	c := context.Background()
+	cs.EXPECT().Get(c, gomock.Eq(shortURL)).Return(&s, nil)
+
+	result, err := repo.FindByShortURL(c, shortURL)
+	if err != nil {
+		t.Fail()
+	}
+	if result != nil {
 		t.Fail()
 	}
 }
@@ -104,7 +124,7 @@ func TestFindByShortURLGetFromPersistent(t *testing.T) {
 		ExpireAt: expireAt,
 	}
 	c := context.Background()
-	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return("", nil)
+	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(nil, nil)
 	ps.EXPECT().FindUnexpiredByShortURL(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(url, nil)
 	cs.EXPECT().Set(c, url.ShortUrl.ShortURL, url.ShortUrl.OriginalURL, uint(300)).Return(nil)
 	tu.EXPECT().Until(expireAt).Return(d)
@@ -135,7 +155,7 @@ func TestFindByShortURLSetCacheIfTimeToExpireIsLessThan300Second(t *testing.T) {
 		ExpireAt: expireAt,
 	}
 	c := context.Background()
-	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return("", nil)
+	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(nil, nil)
 	ps.EXPECT().FindUnexpiredByShortURL(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(url, nil)
 	tu.EXPECT().Until(expireAt).Return(d)
 	cs.EXPECT().Set(c, url.ShortUrl.ShortURL, url.ShortUrl.OriginalURL, uint(d.Seconds())).Return(nil)
@@ -149,14 +169,14 @@ func TestFindByShortURLSetCacheIfTimeToExpireIsLessThan300Second(t *testing.T) {
 	}
 }
 
-func TestFindByShortURLDoNotSetCacheIfOriginalURLIsEmptyString(t *testing.T) {
+func TestFindByShortURLSetCacheEmptyStringIfPersistentStoreReturnNil(t *testing.T) {
 	mockCtrl := gomock.NewController(t)
 	defer mockCtrl.Finish()
 
 	ps, cs, tu := createMock(mockCtrl)
 	repo := shorturl.NewRepository(ps, cs, tu)
 
-	expireAt := time.Now()
+	expireAt := time.Now().AddDate(0, 0, 1)
 	url := &shorturl.ShortURLWithExpireTime{
 		ShortUrl: &shorturl.ShortURL{
 			ShortURL:    "short",
@@ -165,9 +185,9 @@ func TestFindByShortURLDoNotSetCacheIfOriginalURLIsEmptyString(t *testing.T) {
 		ExpireAt: expireAt,
 	}
 	c := context.Background()
-	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return("", nil)
+	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(nil, nil)
 	ps.EXPECT().FindUnexpiredByShortURL(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(nil, nil)
-	cs.EXPECT().Set(c, gomock.Any(), gomock.Any(), gomock.Any()).Times(0)
+	cs.EXPECT().Set(c, url.ShortUrl.ShortURL, "", uint(300)).Return(nil)
 
 	result, err := repo.FindByShortURL(c, url.ShortUrl.ShortURL)
 	if err != nil {
@@ -195,7 +215,7 @@ func TestFindByShortURLReturnErrorIfCacheGetReturnError(t *testing.T) {
 	}
 	mockErr := errors.New("Error")
 	c := context.Background()
-	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return("", mockErr)
+	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(nil, mockErr)
 
 	_, err := repo.FindByShortURL(c, url.ShortUrl.ShortURL)
 	if err != mockErr {
@@ -220,7 +240,7 @@ func TestFindByShortURLReturnErrorIfPersistentGetReturnError(t *testing.T) {
 	}
 	mockErr := errors.New("Error")
 	c := context.Background()
-	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return("", nil)
+	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(nil, nil)
 	ps.EXPECT().FindUnexpiredByShortURL(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(nil, mockErr)
 
 	_, err := repo.FindByShortURL(c, url.ShortUrl.ShortURL)
@@ -247,7 +267,7 @@ func TestFindByShortURLReturnErrorIfCacheSetReturnError(t *testing.T) {
 	}
 	mockErr := errors.New("Error")
 	c := context.Background()
-	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return("", nil)
+	cs.EXPECT().Get(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(nil, nil)
 	ps.EXPECT().FindUnexpiredByShortURL(c, gomock.Eq(url.ShortUrl.ShortURL)).Return(url, nil)
 	tu.EXPECT().Until(expireAt).Return(d)
 	cs.EXPECT().Set(c, url.ShortUrl.ShortURL, url.ShortUrl.OriginalURL, uint(d.Seconds())).Return(mockErr)

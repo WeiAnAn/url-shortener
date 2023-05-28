@@ -8,6 +8,8 @@ import (
 	"github.com/WeiAnAn/url-shortener/internal/utils"
 )
 
+const MAX_CACHE_SECOND = 300
+
 type ShortURLRepository interface {
 	Save(context.Context, *ShortURLWithExpireTime) error
 	FindByShortURL(context.Context, string) (*ShortURL, error)
@@ -48,8 +50,11 @@ func (repo *shortURLRepository) FindByShortURL(c context.Context, shortURL strin
 	if err != nil {
 		return nil, err
 	}
-	if originalURL != "" {
-		return &ShortURL{ShortURL: shortURL, OriginalURL: originalURL}, nil
+	if originalURL != nil {
+		if *originalURL == "" {
+			return nil, nil
+		}
+		return &ShortURL{ShortURL: shortURL, OriginalURL: *originalURL}, nil
 	}
 
 	url, err := repo.persistentStore.FindUnexpiredByShortURL(c, shortURL)
@@ -58,11 +63,15 @@ func (repo *shortURLRepository) FindByShortURL(c context.Context, shortURL strin
 	}
 
 	if url == nil {
+		err = repo.cacheStore.Set(c, shortURL, "", MAX_CACHE_SECOND)
+		if err != nil {
+			return nil, err
+		}
 		return nil, nil
 	}
 
 	timeToExpired := repo.time.Until(url.ExpireAt).Seconds()
-	cacheSecond := math.Min(timeToExpired, 300)
+	cacheSecond := math.Min(timeToExpired, MAX_CACHE_SECOND)
 	err = repo.cacheStore.Set(c, url.ShortUrl.ShortURL, url.ShortUrl.OriginalURL, uint(cacheSecond))
 	if err != nil {
 		return nil, err

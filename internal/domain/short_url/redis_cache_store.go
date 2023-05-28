@@ -14,17 +14,17 @@ func NewRedisCacheStore(client rueidis.Client) *RedisCacheStore {
 	return &RedisCacheStore{client}
 }
 
-func (r *RedisCacheStore) Get(c context.Context, key string) (string, error) {
+func (r *RedisCacheStore) Get(c context.Context, key string) (*string, error) {
 	v, err := r.client.Do(c, r.client.B().Get().Key(key).Build()).ToString()
 
 	if err != nil {
 		if rueidis.IsRedisNil(err) {
-			return "", nil
+			return nil, nil
 		}
-		return "", err
+		return nil, err
 	}
 
-	return v, nil
+	return &v, nil
 }
 
 func (r *RedisCacheStore) Set(c context.Context, key, value string, expireSecond uint) error {

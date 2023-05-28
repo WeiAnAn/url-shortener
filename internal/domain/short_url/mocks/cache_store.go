@@ -35,10 +35,10 @@ func (m *MockCacheStore) EXPECT() *MockCacheStoreMockRecorder {
 }
 
 // Get mocks base method.
-func (m *MockCacheStore) Get(c context.Context, key string) (string, error) {
+func (m *MockCacheStore) Get(c context.Context, key string) (*string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", c, key)
-	ret0, _ := ret[0].(string)
+	ret0, _ := ret[0].(*string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
