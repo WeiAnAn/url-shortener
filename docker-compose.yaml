@@ -1,11 +1,27 @@
+version: '2.1'
 services:
   postgres:
     image: postgres:15.3
     environment:
       POSTGRES_PASSWORD: password
+      POSTGRES_USER: short_url
+      POSTGRES_DB: short_url
     ports:
       - 5432:5432
   redis:
     image: redis:7.0.11
     ports:
       - 6379:6379
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_USER: short_url
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: short_url
+      REDIS_HOST: redis:6379
