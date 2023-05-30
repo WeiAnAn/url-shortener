@@ -1,6 +1,7 @@
 package shorturl
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -11,10 +12,11 @@ import (
 
 type Controller struct {
 	service Service
+	baseURL string
 }
 
-func NewController(service Service) *Controller {
-	return &Controller{service}
+func NewController(service Service, baseURL string) *Controller {
+	return &Controller{service, baseURL}
 }
 
 type CreateShortURLPayload struct {
@@ -51,7 +53,7 @@ func (c *Controller) CreateShortURL(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"id":       shortUrl.ShortUrl.ShortURL,
+		"url":      fmt.Sprintf("%s/%s", c.baseURL, shortUrl.ShortUrl.ShortURL),
 		"expireAt": shortUrl.ExpireAt.Format(time.RFC3339),
 	})
 }

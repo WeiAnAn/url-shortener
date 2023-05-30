@@ -20,9 +20,11 @@ import (
 )
 
 type CreateShortURLResponse struct {
-	Id       string `json:"id"`
+	URL      string `json:"url"`
 	ExpireAt string `json:"expireAt"`
 }
+
+const BASE_URL = "http://localhost"
 
 func TestCreateShortURLResponseCreatedData(t *testing.T) {
 	ctrl := gomock.NewController(t)
@@ -58,7 +60,7 @@ func TestCreateShortURLResponseCreatedData(t *testing.T) {
 	var resBody CreateShortURLResponse
 	json.Unmarshal(w.Body.Bytes(), &resBody)
 
-	if resBody.ExpireAt != body.ExpireAt || resBody.Id != "aaaaaaa" {
+	if resBody.ExpireAt != body.ExpireAt || resBody.URL != fmt.Sprintf("%s/%s", BASE_URL, shortURL.ShortUrl.ShortURL) {
 		t.Fail()
 	}
 }
@@ -356,7 +358,7 @@ func TestRedirectSetContextErrorIfServiceReturnError(t *testing.T) {
 
 func createController(ctrl *gomock.Controller) (*mock_shorturl.MockService, shorturl.Controller) {
 	mockService := mock_shorturl.NewMockService(ctrl)
-	controller := shorturl.NewController(mockService)
+	controller := shorturl.NewController(mockService, BASE_URL)
 
 	return mockService, *controller
 }

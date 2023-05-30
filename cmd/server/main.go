@@ -58,7 +58,7 @@ func setupRouter(db *sql.DB, redisClient rueidis.Client) *gin.Engine {
 	sr := shorturl.NewRepository(ps, cs, &utils.RealTime{})
 	sg := &utils.RandomBase62StringGenerator{}
 	ss := shorturl.NewService(sr, sg)
-	sc := shorturl.NewController(ss)
+	sc := shorturl.NewController(ss, viper.GetString("BASE_URL"))
 
 	r := gin.Default()
 	r.Use(middlewares.ErrorHandler())

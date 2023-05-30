@@ -12,6 +12,7 @@ func init() {
 	viper.SetDefault("DATABASE_PORT", "5432")
 	viper.SetDefault("DATABASE_SSL_MODE", "disable")
 	viper.SetDefault("REDIS_HOST", "localhost:6379")
+	viper.SetDefault("BASE_URL", "http://localhost:8080")
 	viper.AllowEmptyEnv(true)
 	viper.AutomaticEnv()
 }
