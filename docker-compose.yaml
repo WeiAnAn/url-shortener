@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: short_url
     ports:
       - 5432:5432
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
     image: redis:7.0.11
     ports:
@@ -25,3 +27,4 @@ services:
       DATABASE_PASSWORD: password
       DATABASE_NAME: short_url
       REDIS_HOST: redis:6379
+      GIN_MODE: release
