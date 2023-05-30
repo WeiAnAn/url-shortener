@@ -1,7 +1,7 @@
 package main
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -11,24 +11,24 @@ import (
 	"github.com/WeiAnAn/url-shortener/internal/middlewares"
 	"github.com/WeiAnAn/url-shortener/internal/utils"
 	"github.com/gin-gonic/gin"
-	_ "github.com/lib/pq"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/rueidis"
 	"github.com/spf13/viper"
 )
 
 func main() {
-	db := setupDB()
-	defer db.Close()
+	pool := setupDB()
+	defer pool.Close()
 
 	redisClient := setupRedis()
 	defer redisClient.Close()
 
-	r := setupRouter(db, redisClient)
+	r := setupRouter(pool, redisClient)
 
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
-func setupDB() *sql.DB {
+func setupDB() *pgxpool.Pool {
 	connStr := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=%s",
 		viper.GetString("DATABASE_USER"),
 		viper.GetString("DATABASE_PASSWORD"),
@@ -37,11 +37,11 @@ func setupDB() *sql.DB {
 		viper.GetString("DATABASE_NAME"),
 		viper.GetString("DATABASE_SSL_MODE"),
 	)
-	db, err := sql.Open("postgres", connStr)
+	pool, err := pgxpool.New(context.Background(), connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return db
+	return pool
 }
 
 func setupRedis() rueidis.Client {
@@ -52,8 +52,8 @@ func setupRedis() rueidis.Client {
 	return redisClient
 }
 
-func setupRouter(db *sql.DB, redisClient rueidis.Client) *gin.Engine {
-	ps := shorturl.NewPostgresPersistentStore(db)
+func setupRouter(pool *pgxpool.Pool, redisClient rueidis.Client) *gin.Engine {
+	ps := shorturl.NewPgxPersistentStore(pool)
 	cs := shorturl.NewRedisCacheStore(redisClient)
 	sr := shorturl.NewRepository(ps, cs, &utils.RealTime{})
 	sg := &utils.RandomBase62StringGenerator{}
