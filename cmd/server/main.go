@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"net/http"
 	"time"
 
 	_ "github.com/WeiAnAn/url-shortener/internal/config"
@@ -48,11 +47,6 @@ func setupRouter(c *mongo.Client, redisClient rueidis.Client) *gin.Engine {
 	r := gin.Default()
 	r.Use(middlewares.ErrorHandler())
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
 	r.POST("/api/v1/urls", sc.CreateShortURL)
 	r.GET("/:url", sc.Redirect)
 
