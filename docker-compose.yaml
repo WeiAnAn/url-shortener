@@ -1,15 +1,13 @@
 version: '2.1'
 services:
-  postgres:
-    image: postgres:15.3
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: short_url
-      POSTGRES_DB: short_url
+  mongo:
+    image: mongo:6
     ports:
-      - 5432:5432
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: short_url
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: short_urls
   redis:
     image: redis:7.0.11
     ports:
@@ -20,11 +18,8 @@ services:
       - 8080:8080
     depends_on:
       - redis
-      - postgres
+      - mongo
     environment:
-      DATABASE_HOST: postgres
-      DATABASE_USER: short_url
-      DATABASE_PASSWORD: password
-      DATABASE_NAME: short_url
+      MONGODB_URI: mongodb://short_url:password@mongo:27017
       REDIS_HOST: redis:6379
       GIN_MODE: release
