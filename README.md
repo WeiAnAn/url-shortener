@@ -147,9 +147,14 @@ You can configure this app by setting below environment variables
 
 ### Environment Variables
 
-| Variable    | Description                                                                                                                | Default VALUE                       |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| MONGODB_URI | MongoDB connection string. See [the link](https://www.mongodb.com/docs/manual/reference/connection-string/) for more info. | mongodb://short_url@localhost:27017 |
-| REDIS_HOST  | redis connection. format: \<host\>:\<port\>.                                                                               | localhost:6379                      |
-| BASE_URL    | short url base url. Generated short url id will append to this base url.                                                   | http://localhost:8080               |
-| GIN_MODE    | Gin running mode. Please make sure to set this value to 'release' when you are running in the production environment.      | debug                               |
+| Variable          | Description                                                                                                                             | Default VALUE         |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| DATABASE_NAME     | database name                                                                                                                           | short_url             |
+| DATABASE_HOST     | database host                                                                                                                           | localhost             |
+| DATABASE_USER     | database user                                                                                                                           | short_url             |
+| DATABASE_PASSWORD | database user's password                                                                                                                | (empty string)        |
+| DATABASE_PORT     | database port                                                                                                                           | 5432                  |
+| DATABASE_SSL_MODE | possible values: (disable, require, verify-ca, verify-full), check [pq package doc](https://pkg.go.dev/github.com/lib/pq) for more info | disable               |
+| REDIS_HOST        | redis connection. format: \<host\>:\<port\>.                                                                                            | localhost:6379        |
+| BASE_URL          | short url base url. Generated short url id will append to this base url.                                                                | http://localhost:8080 |
+| GIN_MODE          | Gin running mode. Please make sure to set this value to 'release' when you are running in the production environment.                   | debug                 |
