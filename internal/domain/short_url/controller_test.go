@@ -20,8 +20,8 @@ import (
 )
 
 type CreateShortURLResponse struct {
-	URL      string `json:"url"`
-	ExpireAt string `json:"expireAt"`
+	ShortURL string `json:"shortUrl"`
+	ID       string `json:"id"`
 }
 
 const BASE_URL = "http://localhost"
@@ -60,7 +60,7 @@ func TestCreateShortURLResponseCreatedData(t *testing.T) {
 	var resBody CreateShortURLResponse
 	json.Unmarshal(w.Body.Bytes(), &resBody)
 
-	if resBody.ExpireAt != body.ExpireAt || resBody.URL != fmt.Sprintf("%s/%s", BASE_URL, shortURL.ShortUrl.ShortURL) {
+	if resBody.ID != shortURL.ShortUrl.ShortURL || resBody.ShortURL != fmt.Sprintf("%s/%s", BASE_URL, shortURL.ShortUrl.ShortURL) {
 		t.Fail()
 	}
 }

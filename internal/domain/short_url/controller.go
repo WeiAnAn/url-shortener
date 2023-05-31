@@ -53,8 +53,8 @@ func (c *Controller) CreateShortURL(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"url":      fmt.Sprintf("%s/%s", c.baseURL, shortUrl.ShortUrl.ShortURL),
-		"expireAt": shortUrl.ExpireAt.Format(time.RFC3339),
+		"shortUrl": fmt.Sprintf("%s/%s", c.baseURL, shortUrl.ShortUrl.ShortURL),
+		"id":       shortUrl.ShortUrl.ShortURL,
 	})
 }
 
