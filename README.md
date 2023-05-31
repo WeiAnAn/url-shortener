@@ -10,7 +10,7 @@ Please check the [Design](./docs/Design.md) for further design details.
 
 - [Go](https://go.dev/) > 1.20.4
 - [redis](https://redis.io/) > 7.0.0
-- [MongoDB](https://www.mongodb.com/) > 6.0.0
+- [PostgreSQL](https://www.postgresql.org/) > 15.0.0
 
 ## Quick Start
 
@@ -18,6 +18,13 @@ Please check the [Design](./docs/Design.md) for further design details.
 
 - [docker](https://docs.docker.com/)
 - [docker compose](https://docs.docker.com/)
+
+### Clone
+
+```sh
+git clone git@github.com:WeiAnAn/url-shortener.git
+cd url-shortener
+```
 
 ### Build Image
 
