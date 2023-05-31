@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net/http"
 
 	_ "github.com/WeiAnAn/url-shortener/internal/config"
 	shorturl "github.com/WeiAnAn/url-shortener/internal/domain/short_url"
@@ -47,11 +46,6 @@ func setupRouter(p *pgxpool.Pool, redisClient rueidis.Client) *gin.Engine {
 	r := gin.Default()
 	r.Use(middlewares.ErrorHandler())
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
 	r.POST("/api/v1/urls", sc.CreateShortURL)
 	r.GET("/:url", sc.Redirect)
 
