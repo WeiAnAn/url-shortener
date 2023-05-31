@@ -1,4 +1,5 @@
 # url-shortener
+![workflow](https://github.com/WeiAnAn/url-shortener/actions/workflows/go.yml/badge.svg)
 
 A service that shortens URLs and is written in Go.
 
