@@ -23,8 +23,8 @@
 
 以 base62 表示 shorten url 時，在
 
-- 長度 6 時會是，62^6 = 56,800,235,584
-- 長度 7 時會是，62^7 = 3,521,614,606,208
+- 長度 6 時會可以容納 62^6 = 56,800,235,584 筆資料
+- 長度 7 時會可以容納 62^7 = 3,521,614,606,208 筆資料
 
 假設產生 shorten url 是完全隨機時，選擇長度 6 的狀況下一年後的碰撞率約為 0.00064，長度 7 則是 0.00001
 
@@ -76,7 +76,7 @@ _以上皆為 interface_
 提供操作 short url 的行為
 
 - 建立 short url
-- 取得 short url
+- 以 short url 查詢 original url
 
 ## Repository
 
@@ -91,7 +91,7 @@ _以上皆為 interface_
 
 - persistent store 操作永久性儲存的資料
 
-  這層抽象可以快速抽換 Database，可以看 [Postgres 作為資料庫的範例](https://github.com/WeiAnAn/url-shortener/tree/postgres)
+  這層抽象可以快速抽換 Database，可以看 [postgres branch 以 Postgres 作為資料庫的範例](https://github.com/WeiAnAn/url-shortener/tree/postgres)
 
 - cache store 操作 cache 資料
 
@@ -162,6 +162,8 @@ _以上皆為 interface_
 - [go.mongodb.org/mongo-driver](https://pkg.go.dev/go.mongodb.org/mongo-driver@v1.11.6)
 
   mongo-driver 是由官方開發的 MongoDB Go Driver
+  
+  用來操作 MongoDB 
 
 - [github.com/jackc/pgx/v5](https://pkg.go.dev/github.com/jackc/pgx/v5@v5.3.1) (only in postgres branch)
 
@@ -194,3 +196,4 @@ Follow [golang-standards/project-layout](https://github.com/golang-standards/pro
 - [ ] E2E/API testing
 - [ ] Shorten url collision 的 retry
 - [ ] CI/CD
+- [ ] H
