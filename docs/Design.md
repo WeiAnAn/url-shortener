@@ -57,7 +57,7 @@ Cache DB 選擇使用 Redis
 
 記憶體大小估計
 
-以一年約會產生 36,500,000 筆，採用 80/20 法則，抓 20% 是 7,300,000，Redis 每 1,000,000 筆資料約占用 85MB，所以總共會需要大約 620 MB
+以一年約會產生 36,500,000 筆，採用 80/20 法則，抓 20% 是 7,300,000，[Redis 每 1,000,000 筆資料約占用 85MB](https://redis.io/docs/getting-started/faq/)，所以總共會需要大約 620 MB
 
 # Code Architecture
 
@@ -186,8 +186,8 @@ Follow [golang-standards/project-layout](https://github.com/golang-standards/pro
 
 ## TODO
 
-- [] Cache Hotspot data Invalid
-- [] Graceful shutdown
-- [] E2E/API testing
-- [] Shorten url collision 的 retry
-- [] CI/CD
+- [ ] Cache Hotspot data Invalid
+- [ ] Graceful shutdown
+- [ ] E2E/API testing
+- [ ] Shorten url collision 的 retry
+- [ ] CI/CD
