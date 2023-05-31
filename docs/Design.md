@@ -90,6 +90,9 @@ _以上皆為 interface_
 處理資料庫與程式間的邊界
 
 - persistent store 操作永久性儲存的資料
+
+  這層抽象可以快速抽換 Database，可以看 [Postgres 作為資料庫的範例](https://github.com/WeiAnAn/url-shortener/tree/postgres)
+
 - cache store 操作 cache 資料
 
 ## ShortURLGenerator
