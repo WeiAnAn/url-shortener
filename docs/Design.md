@@ -162,8 +162,8 @@ _以上皆為 interface_
 - [go.mongodb.org/mongo-driver](https://pkg.go.dev/go.mongodb.org/mongo-driver@v1.11.6)
 
   mongo-driver 是由官方開發的 MongoDB Go Driver
-  
-  用來操作 MongoDB 
+
+  用來操作 MongoDB
 
 - [github.com/jackc/pgx/v5](https://pkg.go.dev/github.com/jackc/pgx/v5@v5.3.1) (only in postgres branch)
 
@@ -195,5 +195,4 @@ Follow [golang-standards/project-layout](https://github.com/golang-standards/pro
 - [ ] Graceful shutdown
 - [ ] E2E/API testing
 - [ ] Shorten url collision 的 retry
-- [ ] CI/CD
 - [ ] Health check API
