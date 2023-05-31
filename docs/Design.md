@@ -196,4 +196,4 @@ Follow [golang-standards/project-layout](https://github.com/golang-standards/pro
 - [ ] E2E/API testing
 - [ ] Shorten url collision 的 retry
 - [ ] CI/CD
-- [ ] H
+- [ ] Health check API
