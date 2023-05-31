@@ -19,6 +19,13 @@ Please check the [Design](./docs/Design.md) for further design details.
 - [docker](https://docs.docker.com/)
 - [docker compose](https://docs.docker.com/)
 
+### Clone
+
+```sh
+git clone git@github.com:WeiAnAn/url-shortener.git
+cd url-shortener
+```
+
 ### Build Image
 
 ```sh
@@ -153,3 +160,7 @@ You can configure this app by setting below environment variables
 | REDIS_HOST  | redis connection. format: \<host\>:\<port\>.                                                                               | localhost:6379                      |
 | BASE_URL    | short url base url. Generated short url id will append to this base url.                                                   | http://localhost:8080               |
 | GIN_MODE    | Gin running mode. Please make sure to set this value to 'release' when you are running in the production environment.      | debug                               |
+
+## Postgres Version
+
+If you want to use postgres as your database, please check [postgres branch](https://github.com/WeiAnAn/url-shortener/tree/postgres)
